@@ -30,15 +30,12 @@ unwrapInputPath path = tail $ aggregate (Prelude.map unwrap path) [(0,0)]
 zipWithIndex :: [a] -> [(Int, a)]
 zipWithIndex = zip [1..]
 
-crosses :: [(Int, Int)] -> [(Int, Int)] -> [(Int, Maybe Int)]
-crosses xs ys = [(fst a, (snd a) `Data.List.elemIndex` ys) | a <- zipWithIndex xs, (snd a) `member` (fromList ys)]
-
 found :: Maybe Int -> Bool
 found (Just _) = True
 found _ = False
 
-crosses' :: [(Int, Int)] -> [(Int, Int)] -> [(Int, Maybe Int)]
-crosses' xs ys = Data.List.filter (found . snd) $ Prelude.map (\x -> (fst x, (snd x) `Data.List.elemIndex` ys)) (zipWithIndex xs)
+crosses :: [(Int, Int)] -> [(Int, Int)] -> [(Int, Maybe Int)]
+crosses xs ys = Data.List.filter (found . snd) $ Prelude.map (\x -> (fst x, (snd x) `Data.List.elemIndex` ys)) (zipWithIndex xs)
 
 sumIndices :: (Int, Maybe Int) -> Int
 sumIndices (x, Just y) = x + y + 1 -- indexing in elemIndex starts from 0 so we need to add 1
@@ -52,6 +49,6 @@ main = do
     -- technically take 5 here is wrong for some weird cases 
     -- but normally we would encounter the shortest combined cross among the very first
     -- so it's pointless to wait it finish for every crazy far points
-    putStr $ show $ minimum $ Prelude.map sumIndices $ Prelude.take 5 $ crosses' pointsA pointsB
+    putStr $ show $ minimum $ Prelude.map sumIndices $ Prelude.take 5 $ crosses pointsA pointsB
     
 
