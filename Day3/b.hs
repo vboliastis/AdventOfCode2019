@@ -41,7 +41,7 @@ crosses' :: [(Int, Int)] -> [(Int, Int)] -> [(Int, Maybe Int)]
 crosses' xs ys = Data.List.filter (found . snd) $ Prelude.map (\x -> (fst x, (snd x) `Data.List.elemIndex` ys)) (zipWithIndex xs)
 
 sumIndices :: (Int, Maybe Int) -> Int
-sumIndices (x, Just y) = x + y + 1
+sumIndices (x, Just y) = x + y + 1 -- indexing in elemIndex starts from 0 so we need to add 1
 
 main = do
     [inputFile] <- getArgs
@@ -49,6 +49,9 @@ main = do
     let [inputPathA, inputPathB] = Prelude.map (splitOn ",") $ lines input
     let pointsA = unwrapInputPath inputPathA
     let pointsB = unwrapInputPath inputPathB
+    -- technically take 5 here is wrong for some weird cases 
+    -- but normally we would encounter the shortest combined cross among the very first
+    -- so it's pointless to wait it finish for every crazy far points
     putStr $ show $ minimum $ Prelude.map sumIndices $ Prelude.take 5 $ crosses' pointsA pointsB
     
 
